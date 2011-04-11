@@ -39,11 +39,11 @@ def end_element(name):
     global divisions, this_division, vote, in_msp, govt, opposition, years, year
     if name == "division":
         divisions.append(this_division)
-        if (this_division["for"][govt] > 5 and this_division["for"]["CON"] > 5
+        if (this_division["for"][govt] > 10 and this_division["for"]["CON"] > 10
             and this_division["for"][opposition] < 5):
             years[year]["collusion"] = years[year]["collusion"] + 1
 
-        if ("against" in this_division.keys() and this_division["against"][govt] > 5 and this_division["against"]["CON"] > 5
+        if ("against" in this_division.keys() and this_division["against"][govt] > 10 and this_division["against"]["CON"] > 10
             and this_division["against"][opposition] < 5):
             years[year]["collusion"] = years[year]["collusion"] + 1
             
@@ -94,7 +94,10 @@ def main():
     for year in years:
         collusion = int(years[year]["collusion"])
         total = int(years[year]["total"])
-        ratio = (collusion / total) * 100
+        if (collusion > 0 and total > 0):
+            ratio = (collusion / total) * 100
+        else:
+            ratio = 0
         print "%s Tories voted with govt %d times of %d or %d%%" % (year,
                                                                     collusion,
                                                                     total,
